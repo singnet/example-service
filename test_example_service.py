@@ -27,21 +27,18 @@ if __name__ == "__main__":
         # Open a gRPC channel
         channel = grpc.insecure_channel("{}".format(endpoint))
         stub = grpc_ex_grpc.CalculatorStub(channel)
+        number = grpc_ex_pb2.Numbers(a=a, b=b)
 
         if grpc_method == "add":
-            number = grpc_ex_pb2.Numbers(a=a, b=b)
             response = stub.add(number)
             print(response.value)
         elif grpc_method == "sub":
-            number = grpc_ex_pb2.Numbers(a=a, b=b)
             response = stub.sub(number)
             print(response.value)
         elif grpc_method == "mul":
-            number = grpc_ex_pb2.Numbers(a=a, b=b)
             response = stub.mul(number)
             print(response.value)
         elif grpc_method == "div":
-            number = grpc_ex_pb2.Numbers(a=a, b=b)
             response = stub.div(number)
             print(response.value)
         else:
