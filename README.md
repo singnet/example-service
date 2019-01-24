@@ -1,7 +1,5 @@
 # example-service
 
-[![CircleCI](https://circleci.com/gh/singnet/example-service.svg?style=svg)](https://circleci.com/gh/singnet/example-service)
-
 Simple arithmetic service compatible with SingularityNET
 
 ## Getting Started
@@ -54,9 +52,9 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 ```
 {
    "DAEMON_END_POINT": "http://DAEMON_HOST:DAEMON_PORT",
-   "ETHEREUM_JSON_RPC_ENDPOINT": "https://kovan.infura.io",
+   "ETHEREUM_JSON_RPC_ENDPOINT": "https://JSON_RPC_ENDPOINT",
    "IPFS_END_POINT": "http://ipfs.singularitynet.io:80",
-   "REGISTRY_ADDRESS_KEY": "0xe331bf20044a5b24c1a744abc90c1fd711d2c08d",
+   "REGISTRY_ADDRESS_KEY": "REGISTRY_ADDRESS",
    "PASSTHROUGH_ENABLED": true,
    "PASSTHROUGH_ENDPOINT": "http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT",
    "ORGANIZATION_ID": "ORGANIZATION_ID",
@@ -70,9 +68,20 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 }
 ```
 
-For example, replace tags with:
+For example, using the Kovan testnet, replace tags with:
 
 - `http://DAEMON_HOST:DAEMON_PORT`: http://localhost:7000
+- `https://JSON_RPC_ENDPOINT`: https://kovan.infura.io
+- `REGISTRY_ADDRESS`: 0xe331bf20044a5b24c1a744abc90c1fd711d2c08d
+- `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
+- `ORGANIZATION_ID`: example-organization
+- `SERVICE_ID`: example-service
+
+For example, using the Ropsten testnet, replace tags with:
+
+- `http://DAEMON_HOST:DAEMON_PORT`: http://localhost:7001
+- `https://JSON_RPC_ENDPOINT`: https://ropsten.infura.io
+- `REGISTRY_ADDRESS`: 0x5156fde2ca71da4398f8c76763c41bc9633875e4
 - `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
 - `ORGANIZATION_ID`: example-organization
 - `SERVICE_ID`: example-service
