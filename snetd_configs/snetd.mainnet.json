@@ -15,7 +15,7 @@
     "peer_port": 2380,
     "token": "unique-token",
     "cluster": "storage-mainnet=http://127.0.0.1:2380",
-    "data_dir": "/opt/singnet/etcd",
+    "data_dir": "/opt/singnet/etcd/mainnet",
     "enabled": true
   },
 

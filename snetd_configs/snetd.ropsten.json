@@ -15,7 +15,7 @@
     "peer_port": 2382,
     "token": "unique-token",
     "cluster": "storage-ropsten=http://127.0.0.1:2382",
-    "data_dir": "/opt/singnet/etcd",
+    "data_dir": "/opt/singnet/etcd/ropsten",
     "enabled": true
   },
 
