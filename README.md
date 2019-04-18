@@ -102,12 +102,10 @@ python3 run_example_service.py
 
 ##### Running Service + Daemon in Docker Container
 
-* Build the docker image (with proper `SNET Daemon` version) and run a Container from it:
+* Build the docker image and run a container from it:
 
 ```
-SNETD_VERSION="v0.1.7"
 docker build \
-    --build-arg snetd_version=$SNETD_VERSION \
     -t snet_example_service \
     https://github.com/singnet/example-service.git#master
 
