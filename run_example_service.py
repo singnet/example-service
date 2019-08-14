@@ -30,6 +30,12 @@ def main():
                         action="store_true",
                         dest="run_ssl",
                         help="start the daemon with SSL")
+    parser.add_argument("--mp",
+                        help="number of concurrent processes",
+                        metavar="NUMBER_OF_PROCESSES",
+                        default=1,
+                        type=int,
+                        required=False)
     args = parser.parse_args()
     root_path = pathlib.Path(__file__).absolute().parent
     
@@ -41,7 +47,8 @@ def main():
                                service_modules,
                                args.run_daemon,
                                args.daemon_config,
-                               args.run_ssl)
+                               args.run_ssl,
+                               args.mp)
     
     # Continuous checking all subprocess
     try:
@@ -56,7 +63,8 @@ def main():
         raise
 
 
-def start_all_services(cwd, service_modules, run_daemon, daemon_config, run_ssl):
+def start_all_services(cwd, service_modules,
+                       run_daemon, daemon_config, run_ssl, mp):
     """
     Loop through all service_modules and start them.
     For each one, an instance of Daemon "snetd" is created.
@@ -65,14 +73,14 @@ def start_all_services(cwd, service_modules, run_daemon, daemon_config, run_ssl)
     all_p = []
     for _, service_module in enumerate(service_modules):
         service_name = service_module.split(".")[-1]
-        log.info("Launching {} on port {}".format(str(registry[service_name]),
-                                                  service_module))
+        log.info("Launching {} on port {}".format(service_module,
+                                                  str(registry[service_name])))
         all_p += start_service(cwd, service_module,
-                               run_daemon, daemon_config, run_ssl)
+                               run_daemon, daemon_config, run_ssl, mp)
     return all_p
 
 
-def start_service(cwd, service_module, run_daemon, daemon_config, run_ssl):
+def start_service(cwd, service_module, run_daemon, daemon_config, run_ssl, mp):
     """
     Starts SNET Daemon ("snetd") and the python module of the service
     at the passed gRPC port.
@@ -98,11 +106,11 @@ def start_service(cwd, service_module, run_daemon, daemon_config, run_ssl):
                 all_p.append(start_snetd(str(cwd), config_file))
     service_name = service_module.split(".")[-1]
     grpc_port = registry[service_name]["grpc"]
-    p = subprocess.Popen([
-        sys.executable,
-        "-m", service_module,
-        "--grpc-port", str(grpc_port)],
-       cwd=str(cwd))
+    p = subprocess.Popen([sys.executable,
+                          "-m", service_module,
+                          "--grpc-port", str(grpc_port),
+                          "--mp", str(mp)],
+                         cwd=str(cwd))
     all_p.append(p)
     return all_p
 

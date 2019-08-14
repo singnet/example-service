@@ -8,7 +8,7 @@ import socket
 import sys
 
 import argparse
-import os.path
+import os
 import grpc
 
 from service import registry
@@ -56,11 +56,12 @@ Calling service...
 # derived from the protobuf codes.
 class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
     def __init__(self):
+        self.pid = os.getpid()
         self.a = 0
         self.b = 0
         self.result = 0
         # Just for debugging purpose.
-        _LOGGER.debug("CalculatorServicer created")
+        _LOGGER.debug("[{}] CalculatorServicer created".format(self.pid))
 
     # The method that will be exposed to the snet-cli call command.
     # request: incoming data
@@ -74,7 +75,10 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
         self.result = Result()
 
         self.result.value = self.a + self.b
-        _LOGGER.debug("add({},{})={}".format(self.a, self.b, self.result.value))
+        _LOGGER.debug("[{}] add({},{})={}".format(self.pid,
+                                                  self.a,
+                                                  self.b,
+                                                  self.result.value))
         return self.result
 
     def sub(self, request, context):
@@ -83,7 +87,10 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
 
         self.result = Result()
         self.result.value = self.a - self.b
-        _LOGGER.debug("sub({},{})={}".format(self.a, self.b, self.result.value))
+        _LOGGER.debug("[{}] sub({},{})={}".format(self.pid,
+                                                  self.a,
+                                                  self.b,
+                                                  self.result.value))
         return self.result
 
     def mul(self, request, context):
@@ -92,7 +99,10 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
 
         self.result = Result()
         self.result.value = self.a * self.b
-        _LOGGER.debug("mul({},{})={}".format(self.a, self.b, self.result.value))
+        _LOGGER.debug("[{}] mul({},{})={}".format(self.pid,
+                                                  self.a,
+                                                  self.b,
+                                                  self.result.value))
         return self.result
 
     def div(self, request, context):
@@ -101,7 +111,10 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
 
         self.result = Result()
         self.result.value = self.a / self.b
-        _LOGGER.debug("div({},{})={}".format(self.a, self.b, self.result.value))
+        _LOGGER.debug("[{}] div({},{})={}".format(self.pid,
+                                                  self.a,
+                                                  self.b,
+                                                  self.result.value))
         return self.result
 
 
@@ -154,12 +167,19 @@ def main():
                         default=registry[service_name]['grpc'],
                         type=int,
                         required=False)
-    args = parser.parse_args(sys.argv[1:])
+    parser.add_argument("--mp",
+                        help="number of concurrent processes",
+                        metavar="NUMBER_OF_PROCESSES",
+                        default=1,
+                        type=int,
+                        required=False)
+    args = parser.parse_args()
+
+    num_processes = _PROCESS_COUNT if args.mp > _PROCESS_COUNT else args.mp
     with reserve_port(args.grpc_port) as port:
-        _LOGGER.debug("Binding to port '%s'", port)
         sys.stdout.flush()
         workers = []
-        for _ in range(_PROCESS_COUNT):
+        for _ in range(num_processes):
             # NOTE: It is imperative that the worker subprocesses be forked before
             # any gRPC servers start up. See
             # https://github.com/grpc/grpc/issues/16001 for more details.
