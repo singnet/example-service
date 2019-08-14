@@ -38,10 +38,10 @@ def main():
                         required=False)
     args = parser.parse_args()
     root_path = pathlib.Path(__file__).absolute().parent
-    
+
     # All services modules go here
     service_modules = ["service.example_service"]
-    
+
     # Call for all the services listed in service_modules
     all_p = start_all_services(root_path,
                                service_modules,
@@ -49,7 +49,7 @@ def main():
                                args.daemon_config,
                                args.run_ssl,
                                args.mp)
-    
+
     # Continuous checking all subprocess
     try:
         while True:
@@ -85,7 +85,7 @@ def start_service(cwd, service_module, run_daemon, daemon_config, run_ssl, mp):
     Starts SNET Daemon ("snetd") and the python module of the service
     at the passed gRPC port.
     """
-    
+
     def add_ssl_configs(conf):
         """Add SSL keys to snetd.config.json"""
         with open(conf, "r") as f:
@@ -94,7 +94,7 @@ def start_service(cwd, service_module, run_daemon, daemon_config, run_ssl, mp):
             snetd_configs["ssl_key"] = "/opt/singnet/.certs/privkey.pem"
         with open(conf, "w") as f:
             json.dump(snetd_configs, f, sort_keys=True, indent=4)
-    
+
     all_p = []
     if run_daemon:
         if daemon_config:

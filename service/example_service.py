@@ -54,6 +54,8 @@ Calling service...
 
 # Create a class to be added to the gRPC server
 # derived from the protobuf codes.
+
+
 class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
     def __init__(self):
         self.pid = os.getpid()
@@ -157,6 +159,7 @@ def reserve_port(grpc_port=7777):
         yield sock.getsockname()[1]
     finally:
         sock.close()
+
 
 def main():
     """ Runs the gRPC server to communicate with the SNET Daemon. """
