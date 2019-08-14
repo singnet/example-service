@@ -1,2 +1,2 @@
-grpcio>=1.14.2
+grpcio>=1.14.2 --no-binary grpcio
 grpcio-tools>=1.14.1
