@@ -1,11 +1,10 @@
 {
-  "daemon_end_point": "0.0.0.0:7052",
+  "daemon_end_point": "0.0.0.0:7000",
   "ipfs_end_point": "http://ipfs.singularitynet.io:80",
   "blockchain_network_selected": "ropsten",
-  "passthrough_enabled": true,
   "passthrough_endpoint": "http://localhost:7003",
-  "organization_id": "snet",
-  "service_id": "example-service",
+  "organization_id": "my-organization",
+  "service_id": "my-service",
   "payment_channel_storage_server": {
     "data_dir": "/opt/singnet/etcd/ropsten"
   },
