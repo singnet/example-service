@@ -52,9 +52,8 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 ```
 {
    "DAEMON_END_POINT": "DAEMON_HOST:DAEMON_PORT",
-   "ETHEREUM_JSON_RPC_ENDPOINT": "https://JSON_RPC_ENDPOINT",
+   "BLOCKCHAIN_NETWORK_SELECTED": "NETWORK",
    "IPFS_END_POINT": "http://ipfs.singularitynet.io:80",
-   "REGISTRY_ADDRESS_KEY": "REGISTRY_ADDRESS",
    "PASSTHROUGH_ENABLED": true,
    "PASSTHROUGH_ENDPOINT": "http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT",
    "ORGANIZATION_ID": "ORGANIZATION_ID",
@@ -73,18 +72,16 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 
 For example, using the Ropsten testnet, replace tags with:
 
-- `DAEMON_HOST:DAEMON_PORT`: localhost:7000
-- `https://JSON_RPC_ENDPOINT`: https://ropsten.infura.io
-- `REGISTRY_ADDRESS`: 0x5156fde2ca71da4398f8c76763c41bc9633875e4
+- `DAEMON_HOST:DAEMON_PORT`: localhost:7052
+- `NETWORK`: ropsten
 - `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
 - `ORGANIZATION_ID`: example-organization
 - `SERVICE_ID`: example-service
 
-For example, using the Kovan testnet, replace tags with:
+For example, using the Mainnet, replace tags with:
 
-- `DAEMON_HOST:DAEMON_PORT`: localhost:7000
-- `https://JSON_RPC_ENDPOINT`: https://kovan.infura.io
-- `REGISTRY_ADDRESS`: 0xe331bf20044a5b24c1a744abc90c1fd711d2c08d
+- `DAEMON_HOST:DAEMON_PORT`: localhost:7002
+- `NETWORK`: main
 - `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
 - `ORGANIZATION_ID`: example-organization
 - `SERVICE_ID`: example-service
@@ -126,10 +123,9 @@ After this, run the service (with `SNET Daemon`), make sure you have the `snetd.
 ```
 # cat snetd.config.json
 {
-   "DAEMON_END_POINT": "localhost:7000",
-   "ETHEREUM_JSON_RPC_ENDPOINT": "https://ropsten.infura.io",
+   "DAEMON_END_POINT": "0.0.0.0:7052",
+   "BLOCKCHAIN_NETWORK_SELECTED": "ropsten",
    "IPFS_END_POINT": "http://ipfs.singularitynet.io:80",
-   "REGISTRY_ADDRESS_KEY": "0x5156fde2ca71da4398f8c76763c41bc9633875e4",
    "PASSTHROUGH_ENABLED": true,
    "PASSTHROUGH_ENDPOINT": "http://localhost:7003",
    "ORGANIZATION_ID": "my-organization",

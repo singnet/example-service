@@ -21,8 +21,7 @@ def main():
     parser.add_argument("--daemon-config",
                         dest="daemon_config",
                         help="Path of daemon configuration file, without config it won't be started",
-                        required=False
-                        )
+                        required=False)
     parser.add_argument("--ssl", action="store_true", dest="run_ssl", help="start the daemon with SSL")
     args = parser.parse_args()
     root_path = pathlib.Path(__file__).absolute().parent

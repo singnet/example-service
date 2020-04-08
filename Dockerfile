@@ -1,5 +1,10 @@
 FROM ubuntu:18.04
 
+ARG git_owner="singnet"
+ARG git_repo="example-service"
+ARG git_branch="master"
+ARG snetd_version
+
 ENV SINGNET_REPOS=/opt/singnet
 
 RUN mkdir -p ${SINGNET_REPOS}
@@ -13,11 +18,14 @@ RUN apt-get update && \
 
 RUN apt-get install -y python3 python3-pip
 
-RUN SNETD_VERSION=`curl -s https://api.github.com/repos/singnet/snet-daemon/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'` && \
+# SNET Daemon
+RUN SNETD_GIT_VERSION=`curl -s https://api.github.com/repos/singnet/snet-daemon/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")' || echo "v3.1.5"` && \
+    SNETD_VERSION=${snetd_version:-${SNETD_GIT_VERSION}} && \
     cd /tmp && \
     wget https://github.com/singnet/snet-daemon/releases/download/${SNETD_VERSION}/snet-daemon-${SNETD_VERSION}-linux-amd64.tar.gz && \
     tar -xvf snet-daemon-${SNETD_VERSION}-linux-amd64.tar.gz && \
-    mv snet-daemon-${SNETD_VERSION}-linux-amd64/snetd /usr/bin/snetd
+    mv snet-daemon-${SNETD_VERSION}-linux-amd64/snetd /usr/bin/snetd && \
+    rm -rf snet-daemon-*
 
 RUN cd ${SINGNET_REPOS} && \
     git clone https://github.com/singnet/example-service.git && \
