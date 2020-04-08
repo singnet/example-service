@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# .proto compiled files
+service/service_spec/*.py

@@ -13,7 +13,7 @@ Simple arithmetic service compatible with SingularityNET
 * Clone the git repository:
 
 ```
-git clone git@github.com:singnet/example-service.git
+git clone https://github.com/singnet/example-service.git
 cd example-service
 ```
 
@@ -51,16 +51,14 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 
 ```
 {
-   "DAEMON_END_POINT": "DAEMON_HOST:DAEMON_PORT",
-   "ETHEREUM_JSON_RPC_ENDPOINT": "https://JSON_RPC_ENDPOINT",
+   "DAEMON_END_POINT": "__DAEMON_HOST__:__DAEMON_PORT__",
+   "BLOCKCHAIN_NETWORK_SELECTED": "__NETWORK__",
    "IPFS_END_POINT": "http://ipfs.singularitynet.io:80",
-   "REGISTRY_ADDRESS_KEY": "REGISTRY_ADDRESS",
-   "PASSTHROUGH_ENABLED": true,
-   "PASSTHROUGH_ENDPOINT": "http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT",
-   "ORGANIZATION_ID": "ORGANIZATION_ID",
-   "SERVICE_ID": "SERVICE_ID",
+   "PASSTHROUGH_ENDPOINT": "http://__SERVICE_GRPC_HOST__:__SERVICE_GRPC_PORT__",
+   "ORGANIZATION_ID": "__ORGANIZATION_ID__",
+   "SERVICE_ID": "__SERVICE_ID__",
    "PAYMENT_CHANNEL_STORAGE_SERVER": {
-       "DATA_DIR": "/opt/singnet/etcd/"
+       "DATA_DIR": "/opt/singnet/etcd/__NETWORK__"
    },
    "LOG": {
        "LEVEL": "debug",
@@ -73,21 +71,11 @@ Create the `SNET Daemon`'s config JSON file (`snetd.config.json`).
 
 For example, using the Ropsten testnet, replace tags with:
 
-- `DAEMON_HOST:DAEMON_PORT`: localhost:7000
-- `https://JSON_RPC_ENDPOINT`: https://ropsten.infura.io
-- `REGISTRY_ADDRESS`: 0x5156fde2ca71da4398f8c76763c41bc9633875e4
-- `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
-- `ORGANIZATION_ID`: example-organization
-- `SERVICE_ID`: example-service
-
-For example, using the Kovan testnet, replace tags with:
-
-- `DAEMON_HOST:DAEMON_PORT`: localhost:7000
-- `https://JSON_RPC_ENDPOINT`: https://kovan.infura.io
-- `REGISTRY_ADDRESS`: 0xe331bf20044a5b24c1a744abc90c1fd711d2c08d
-- `http://SERVICE_GRPC_HOST:SERVICE_GRPC_PORT`: http://localhost:7003
-- `ORGANIZATION_ID`: example-organization
-- `SERVICE_ID`: example-service
+- `__DAEMON_HOST__:__DAEMON_PORT__`: localhost:7000
+- `__NETWORK__`: ropsten (main for Mainnet)
+- `http://__SERVICE_GRPC_HOST__:__SERVICE_GRPC_PORT__`: http://localhost:7003
+- `__ORGANIZATION_ID__`: my-organization
+- `__SERVICE_ID__`: my-service
 
 See [SingularityNet daemon configuration](https://github.com/singnet/snet-daemon/blob/master/README.md#configuration) for detailed configuration description.
 
@@ -100,7 +88,7 @@ download the latest `SNET Daemon` [release here](https://github.com/singnet/snet
 python3 run_example_service.py
 ```
 
-##### Running Service + Daemon in Docker Container
+##### Running Service + Daemon in a Docker Container
 
 * Build the docker image and run a container from it:
 
@@ -126,16 +114,14 @@ After this, run the service (with `SNET Daemon`), make sure you have the `snetd.
 ```
 # cat snetd.config.json
 {
-   "DAEMON_END_POINT": "localhost:7000",
-   "ETHEREUM_JSON_RPC_ENDPOINT": "https://ropsten.infura.io",
+   "DAEMON_END_POINT": "0.0.0.0:7000",
+   "BLOCKCHAIN_NETWORK_SELECTED": "ropsten",
    "IPFS_END_POINT": "http://ipfs.singularitynet.io:80",
-   "REGISTRY_ADDRESS_KEY": "0x5156fde2ca71da4398f8c76763c41bc9633875e4",
-   "PASSTHROUGH_ENABLED": true,
    "PASSTHROUGH_ENDPOINT": "http://localhost:7003",
    "ORGANIZATION_ID": "my-organization",
    "SERVICE_ID": "my-service",
    "PAYMENT_CHANNEL_STORAGE_SERVER": {
-       "DATA_DIR": "/opt/singnet/etcd/"
+       "DATA_DIR": "/opt/singnet/etcd/ropsten"
    },
    "LOG": {
        "LEVEL": "debug",
