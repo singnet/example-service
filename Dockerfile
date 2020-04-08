@@ -1,7 +1,6 @@
 FROM ubuntu:18.04
 
 ARG git_owner="singnet"
-ARG git_repo="example-service"
 ARG git_branch="master"
 ARG snetd_version
 
@@ -28,7 +27,7 @@ RUN SNETD_GIT_VERSION=`curl -s https://api.github.com/repos/singnet/snet-daemon/
     rm -rf snet-daemon-*
 
 RUN cd ${SINGNET_REPOS} && \
-    git clone https://github.com/singnet/example-service.git && \
+    git clone -b ${git_branch} https://github.com/${git_owner}/example-service.git && \
     cd example-service && \
     pip3 install -r requirements.txt && \
     sh buildproto.sh
