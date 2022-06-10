@@ -39,7 +39,7 @@ class ModelServicer(grpc_bt_grpc.ModelServicer):
         return self.result
 
     def update_model_access(self, request, context):
-        log.debug("Update Model ")
+        log.debug(" daemon will take care of this , AI developer is to just provide a dummy code as below")
         # To respond we need to create a Result() object (from .proto file)
         self.result = ModelDetailsResponse()
         self.result.status = IN_PROGRESS
@@ -47,25 +47,23 @@ class ModelServicer(grpc_bt_grpc.ModelServicer):
 
     def delete_model(self, request, context):
 
-        log.debug("MODEL DELETED AT CLIENT END to....")
+        log.debug("Request to delete the model , ai developer needs to handel this ....")
         # To respond we need to create a Result() object (from .proto file)
         self.result = ModelDetailsResponse()
         self.result.status = COMPLETED
         return self.result
 
 
-    def get_model_details(self, request, context):
-        # In our case, request is a Numbers() object (from .proto file)
-        log.debug("Not needed to implement , just a dummy  ....")
-        # To respond we need to create a Result() object (from .proto file)
+    def get_all_models(self, request, context):
+
+        log.debug(" daemon will take care of this , AI developer is to just provide a dummy code as below")
         self.result = ModelDetailsResponse()
-        self.result.status = IN_PROGRESS
         return self.result
 
     def get_training_status(self, request, context):
-        # In our case, request is a Numbers() object (from .proto file)
+        # AI developer to keep track of the training models status and return
         log.debug("get training status ")
-        # To respond we need to create a Result() object (from .proto file)
+
         self.result = ModelDetailsResponse()
         self.result.status = IN_PROGRESS
         return self.result
