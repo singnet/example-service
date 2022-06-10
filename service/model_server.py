@@ -39,7 +39,7 @@ class ModelServicer(grpc_bt_grpc.ModelServicer):
         return self.result
 
     def update_model_access(self, request, context):
-        log.debug("MAY be I Dont need to implement this,update_model_access")
+        log.debug("Update Model ")
         # To respond we need to create a Result() object (from .proto file)
         self.result = ModelDetailsResponse()
         self.result.status = IN_PROGRESS
@@ -56,7 +56,7 @@ class ModelServicer(grpc_bt_grpc.ModelServicer):
 
     def get_model_details(self, request, context):
         # In our case, request is a Numbers() object (from .proto file)
-        log.debug("WHY ASK ME ASK DAEMON get_model_details ....")
+        log.debug("Not needed to implement , just a dummy  ....")
         # To respond we need to create a Result() object (from .proto file)
         self.result = ModelDetailsResponse()
         self.result.status = IN_PROGRESS
@@ -64,7 +64,7 @@ class ModelServicer(grpc_bt_grpc.ModelServicer):
 
     def get_training_status(self, request, context):
         # In our case, request is a Numbers() object (from .proto file)
-        log.debug("WHY ASK ME ASK DAEMON get_model_details ....")
+        log.debug("get training status ")
         # To respond we need to create a Result() object (from .proto file)
         self.result = ModelDetailsResponse()
         self.result.status = IN_PROGRESS
