@@ -1,18 +1,51 @@
 syntax = "proto3";
-
+import "singnet/snet-daemon/training/training.proto";
+import "singnet/snet-daemon/pricing/pricing.proto";
 package example_service;
+
+message AddressList {
+    repeated string address = 1;
+    string model_details = 2;
+}
 
 message Numbers {
     float a = 1;
     float b = 2;
+    //highlight this as part of documentation
+    string model_id = 3;
 }
 
 message Result {
     float value = 1;
 }
+message ModelId {
+    string model_id = 1;
+}
+message TrainingRequest  {
+    string link = 1;
+    string address = 2;
+    string model_id =3 ;
+    string request_id =4;
+}
+message TrainingResponse  {
+    string link = 1;
+    string model_id =2 ;
+    string status = 3;//put this in enum
+    string request_id = 4;
+}
 
 service Calculator {
-    rpc add(Numbers) returns (Result) {}
+    //AI developer can define their own training methods , if you wish to have a different pricing , please use
+    // define the pricing method as shown below, dynamic_pricing_train_add, please make sure the i/p is exactly the same
+    rpc train_add(TrainingRequest) returns (TrainingResponse) {
+        option (pricing.my_method_option).estimatePriceMethod = "dynamic_pricing_train_add";
+        option (training.my_method_option).trainingMethodIndicator = "true";
+    }
+
+    //make sure the params to the method are exactly the same as that of the method in which needs dynamic price computation
+    rpc dynamic_pricing_train_add(TrainingRequest) returns (pricing.PriceInCogs) {}
+    rpc dynamic_pricing_add(Numbers) returns (pricing.PriceInCogs) {}
+    rpc add(Numbers) returns (Result) {option (pricing.my_method_option).estimatePriceMethod = "dynamic_pricing_add";}
     rpc sub(Numbers) returns (Result) {}
     rpc mul(Numbers) returns (Result) {}
     rpc div(Numbers) returns (Result) {}

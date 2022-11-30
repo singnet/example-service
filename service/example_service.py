@@ -1,5 +1,6 @@
 import sys
 import logging
+import uuid
 
 import grpc
 import concurrent.futures as futures
@@ -8,11 +9,13 @@ import service.common
 
 # Importing the generated codes from buildproto.sh
 import service.service_spec.example_service_pb2_grpc as grpc_bt_grpc
-from service.service_spec.example_service_pb2 import Result
+from service.model_server import ModelServicer
+from service.service_spec.example_service_pb2 import Result, ModelId, TrainingResponse
+from singnet.snet_daemon.pricing.pricing_pb2 import PriceInCogs
+import singnet.snet_daemon.training.training_pb2_grpc as  grpc_bt_grpc_training
 
 logging.basicConfig(level=10, format="%(asctime)s - [%(levelname)8s] - %(name)s - %(message)s")
 log = logging.getLogger("example_service")
-
 
 """
 Simple arithmetic service to test the Snet Daemon (gRPC), dApp and/or Snet-CLI.
@@ -67,6 +70,41 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
         log.debug("add({},{})={}".format(self.a, self.b, self.result.value))
         return self.result
 
+    def train_add(self, request, context):
+        log.debug("GOING TO START TRAINING DATA NOW..................................")
+
+        # To respond we need to create a Result() object (from .proto file)
+        self.result = TrainingResponse()
+        self.result.model_id = request.model_id
+        self.result.status = "In Progress"
+
+        log.debug("TrainingResponse({},{})".format(self.result.model_id, self.result.status))
+        return self.result
+
+
+
+    def dynamic_pricing_train_add(self, request, context):
+        log.debug("DYNAMIC PRICE method dynamic_pricing_train_add , invoked for train_add")
+
+        # To respond we need to create a Result() object (from .proto file)
+        self.result = PriceInCogs()
+
+        self.result.price = 13
+        log.debug("price returned is {}".format(self.result.price))
+        return self.result
+
+    def dynamic_pricing_add(self, request, context):
+        # In our case, request is a Numbers() object (from .proto file)
+        self.a = request.a
+        self.b = request.b
+
+        # To respond we need to create a Result() object (from .proto file)
+        self.result = PriceInCogs()
+
+        self.result.price = 13
+        log.debug("add({},{})={}".format(self.a, self.b, self.result.price))
+        return self.result
+
     def sub(self, request, context):
         self.a = request.a
         self.b = request.b
@@ -106,6 +144,7 @@ class CalculatorServicer(grpc_bt_grpc.CalculatorServicer):
 def serve(max_workers=10, port=7777):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=max_workers))
     grpc_bt_grpc.add_CalculatorServicer_to_server(CalculatorServicer(), server)
+    grpc_bt_grpc_training.add_ModelServicer_to_server(ModelServicer(), server)
     server.add_insecure_port("[::]:{}".format(port))
     return server
 
